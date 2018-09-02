@@ -1,0 +1,6 @@
+/dokr.egg-info/
+/dist/
+build/
+.settings/
+.project
+.classpath
