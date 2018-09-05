@@ -27,7 +27,6 @@ def update_task_image_version(task_def_json, version_number):
     return task_def_json;
 
 def deploy():
-    
     build_number = "10"
     region = "ap-south-1"
     service_name = "docker-ecs-boot-service"
