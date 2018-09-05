@@ -6,3 +6,4 @@ build/
 .classpath
 *.pyc
 /dokenv/
+/__pycache__/
