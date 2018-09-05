@@ -9,16 +9,16 @@ import docker_helper as docker;
 arg = sys.argv[1]
 
 if arg == 'clean'  :
-        docker.cleanUp();
+    docker.clean_up();
 elif arg == 'deploy' :
-        ecs.deploy();
+    ecs.deploy();
 elif arg == 'clean-all':
-        docker.cleanAll();
+    docker.clean_all();
 elif arg == 'lecs':
-        ecs.loginEcs()
+    ecs.login_ecs()
 elif arg == 'tag':
-        docker.addBuildTag()
+    docker.add_build_tag()
 elif arg == 'push':  
-        docker.pushImage();
+    docker.push_image();
 else:     
-        utils.helper();
+    utils.helper();

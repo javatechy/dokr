@@ -1,53 +1,43 @@
-#!/usr/bin/env python
-
 import sys
 import os
-import utils
+import utils.helper as utils;
 
-
-def addBuildTag():
-    searchPattern = sys.argv[2];
-    tagName = sys.argv[3];
-    print('\nSearching pattern: *', searchPattern + '* and adding tag ' + tagName)
-    imageName = utils.cmdExec("docker images | cut -d ' '  -f1 | grep " + searchPattern + " | head -1");
-    print('\nFound this image name from the given pattern ' , imageName)
-    addTagCommand = utils.joinMe(['docker tag ' , imageName , ' ' , imageName , ':', tagName ]);
-    print('\nExecuting tag command : \n' + addTagCommand)
-    print(utils.cmdExec(addTagCommand));
-    print('\nAdded Tag : ' + tagName + ' into the images\n')
-    print(utils.cmdExec('docker images'))
+def add_build_tag():
+    search_pattern = sys.argv[2];
+    tag_name = sys.argv[3];
+    print("\nSearching pattern: *"+ search_pattern + "* and adding tag " + tag_name)
+    image_name = utils.cmd_exec("docker images | cut -d ' '  -f1 | grep " + search_pattern + " | head -1");
+    print("\nFound this image name from the given pattern : " + image_name)
+    add_tag_command = utils.join_me(['docker tag ' , image_name , ' ' , image_name , ':', tag_name ]);
+    utils.cmd_exec(add_tag_command);
+    print('\nAdded Tag : ' + tag_name + ' into the images\n')
+    utils.cmd_exec('docker images')
 
   
-def pushImage():
-    searchPattern = sys.argv[2];
-    print('\nPushing images matching pattern ', searchPattern)
+def push_image():
+    search_pattern = sys.argv[2];
+    print("\nPushing images matching pattern : "+ search_pattern)
+    image_name = utils.cmd_exec("docker images | cut -d ' '  -f1 | grep " + search_pattern + " | head -1");
+    print("\nFound this image name from the given pattern : " + image_name)
+    image_list_str = "docker image inspect -f '{{join .RepoTags \"\\n\" }}' " + image_name;
+    print("\nFinding images tags")
+    image_list = utils.cmd_exec(image_list_str)
+    print("\nFound Following images : \n\n" + image_list)
+    tag_list = utils.cmd_exec(image_list_str).split("\n")
     
-    imageName = utils.cmdExec("docker images | cut -d ' '  -f1 | grep " + searchPattern + " | head -1");
+    print('\nTotal Tags found :' , len(tag_list))
     
-    print('\nFound this image name from the given pattern ' , imageName)
-    
-    imageListStr = "docker image inspect -f '{{join .RepoTags \"\\n\" }}' " + imageName;
-    imageList = utils.cmdExec(imageListStr)
-    
-    print('\nFound Following images : \n\n' + imageList)
-    
-    tagList = utils.cmdExec(imageListStr).split("\n")
-    
-    print('\nTotal Tags found :' , len(tagList))
-    
-    for tag in tagList:
+    for tag in tag_list:
         print('\n--------------------------Pushing image :' + tag + '-----------------------------------')
-        print(utils.cmdExec('docker push ' + tag))
+        print(utils.cmd_exec('docker push ' + tag))
 
-def cleanUp():
-    searchPattern = sys.argv[2];
-    print('\nCleaning Old Images  matching pattern ', searchPattern)
+def clean_up():
+    search_pattern = sys.argv[2];
+    print('\nCleaning Old Images  matching pattern ', search_pattern)
     print('\n----------  Cleaning Old Images ---- \n')
-    cleaner = utils.cmdExec("docker images -a | grep " + searchPattern + " | awk '{print $3}' | xargs docker rmi -f")
-    print(cleaner)
+    utils.cmd_exec("docker images -a | grep " + search_pattern + " | awk '{print $3}' | xargs docker rmi -f")
 
-
-def cleanAll():
+def clean_all():
     print('\nCleaning docker system ')
-    cleaner = utils.cmdExec("docker system prune -a -f")
-    print(cleaner)
+    utils.cmd_exec("docker system prune -a -f")
+    

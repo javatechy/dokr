@@ -1,14 +1,17 @@
-#!/usr/bin/env python
-
 import sys
 import os
 
 
-def cmdExec(str):
+def cmd_exec(str):
+    print("\n------------------------ Executing Command: Start ------------------------")
+    print("\n$>>"+str);
+    output = os.popen(str).read().strip();
+    print("\n$>>" + output);
+    print("\n------------------------ Executing Command: End ------------------------")
     return os.popen(str).read().strip()
 
 
-def joinMe(stringList):
+def join_me(stringList):
     return "".join(string for string in stringList)
 
 def helper():
