@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='dokr',
-    version='0.2',
+    version='0.4',
     scripts=['dokr'] ,
     author="Deepak Kumar",
     author_email="deepak.kumar.iet@gmail.com",
