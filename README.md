@@ -1,6 +1,6 @@
 # dokr
 
-Helper package for docker and ECS tasks
+A Helper pip package for docker and ECS tasks
 
 
 #### Check The options Available
