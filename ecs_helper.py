@@ -30,7 +30,7 @@ def update_task_image_version(task_def_json, version_number):
 def cluster_list():
     clusters = utils.cmd_exec("aws ecs list-clusters")
     clusters = json.loads(clusters)
-    print( "List of clusters : \n " + json.dumps(clusters['clusterArns'], indent=4))
+    print("List of clusters : \n " + json.dumps(clusters['clusterArns'], indent=4))
     
     
 def deploy():
@@ -57,4 +57,35 @@ def deploy():
     # aws ecs register-task-definition --family docker_ecs_app_image --cli-input-json file://docker_boot_app-v_8.json
     utils.cmd_exec("aws ecs register-task-definition --family " + task_family + " --cli-input-json " + json.dumps(task_def_json) )    
     """
+
+    
+def find_ip():
+    ec2_instances = utils.cmd_exec("aws ec2 describe-instances")
+    ec2_instances = json.loads(ec2_instances)
+    instanceToSearch = sys.argv[2];
+    
+    found_instance = {};
+    print ("Searching the pattern : "+ instanceToSearch)
+    reservations = ec2_instances['Reservations'];
+    for reservation in reservations:
+        print("-------------------------------------------------------------------------")
+        instances = reservation['Instances']
+        for instance in instances:
+            tags = instance['Tags'];
+            # print("Tag : \n " + json.dumps(tags))
+            for tag  in tags:
+                tagKey = json.dumps(tag['Key']);
+                tagValue = json.dumps(tag['Value']);
+                if instanceToSearch in tagValue :
+                    print("Value  : " + tagValue )
+                    found_instance = instance;
+                    break
+    
+    ip_address  = found_instance['NetworkInterfaces'][0]['Association']['PublicIp'];
+    
+    print (ip_address)
+    # print( "List of instances : \n " + json.dumps(instances['Reservations'], indent=4))
+def add_in_etc_hosts():  
+    ip_address = find_ip()
+    host_ip = ""
     

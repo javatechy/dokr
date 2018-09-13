@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='dokr',
-    version='0.4',
+    version='0.5',
     scripts=['dokr'] ,
     author="Deepak Kumar",
     author_email="deepak.kumar.iet@gmail.com",
@@ -14,9 +14,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/javatechy/dokr",
     packages=setuptools.find_packages(),
-    py_modules = ['ecs_helper', 'docker_helper'],
+    py_modules = ['ecs_helper', 'docker_helper', 'machine_test'],
     install_requires=[
-        'ecs-deploy'
+        'requests'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

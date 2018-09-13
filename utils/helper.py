@@ -6,7 +6,7 @@ def cmd_exec(str):
     print("\n------------------------ Executing Command: Start ------------------------")
     print("\n$>>"+str);
     output = os.popen(str).read().strip();
-    print("\n$>>" + output);
+    #print("\n$>>" + output);
     print("\n------------------------ Executing Command: End ------------------------")
     return os.popen(str).read().strip()
 

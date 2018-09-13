@@ -5,8 +5,10 @@ import utils.helper as utils;
 import ecs_helper as ecs;
 import sys;
 import docker_helper as docker;
-
+import machine_test  as mctest;
+    
 arg = sys.argv[1]
+
 
 if arg == 'clean':
     docker.clean_up();
@@ -18,7 +20,12 @@ elif arg == 'lecs':
     ecs.login_ecs()
 elif arg == 'tag':
     docker.add_build_tag()
+elif arg == 'ip':
+    ecs.find_ip()
 elif arg == 'push':  
     docker.push_image();
+elif arg == 'mcstatus':
+	mctest.test_machine()
 else:
     utils.helper();
+    
