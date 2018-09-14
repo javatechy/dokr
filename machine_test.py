@@ -3,14 +3,23 @@ import os
 import utils.helper as utils
 import utils.http_client as request
 import json
+import config
+import constant
+
+
+def get_slack_url():
+    if constant.SLACK_URI not in os.environ:
+        uri = raw_input("What your slack URL ?")
+        print ("Your URI is : " + uri)
+        config.set_env(constant.SLACK_URI, "https://hooks.slack.com/services/" + uri)
+    return config.get_env(constant.SLACK_URI);
 
 def test_machine():
-    usage  = utils.cmd_exec("docker exec -it fe0df5cdc63f  vmstat -s | grep 'memory'")
-    url = "https://hooks.slack.com/services/XXX/XXX/XXXXXXX"
+    url = get_slack_url();
+    usage = utils.cmd_exec("docker exec -it fe0df5cdc63f  vmstat -s | grep 'memory'")
+    message = raw_input("Enter the message you want to send : ")
+    
     data = {
-        'text': '>>> This is `sent` \n from *dokr* plugin \n> Memory Left on your device : '+usage 
+        'text': '>>> This is `sent` \n from *dokr* plugin \n>' + message + ' \n Memory Left on your device : ' + usage 
     }
-    request.post(url,data)
-    # test memory
-    # Processor
-    # Health testing in a machine
+    request.post(url, data)

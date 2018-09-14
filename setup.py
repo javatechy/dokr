@@ -14,7 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/javatechy/dokr",
     packages=setuptools.find_packages(),
-    py_modules=['ecs_helper', 'docker_helper', 'machine_test'],
+    py_modules=['ecs_helper', 'docker_helper', 'machine_test', 'config'],
     install_requires=[
         'requests'
     ],
