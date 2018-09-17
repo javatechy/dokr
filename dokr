@@ -26,6 +26,8 @@ elif arg == 'push':
     docker.push_image();
 elif arg == 'mcstatus':
 	mctest.test_machine()
+elif arg == 'deploy':
+	ecs.deploy() 
 else:
     utils.helper();
     

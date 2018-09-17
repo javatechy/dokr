@@ -30,25 +30,49 @@ def update_task_image_version(task_def_json, version_number):
 def cluster_list():
     clusters = utils.cmd_exec("aws ecs list-clusters")
     clusters = json.loads(clusters)
-    print("List of clusters : \n " + json.dumps(clusters['clusterArns'], indent=4))
+    return clusters['clusterArns']
+
+
+def services_in_cluster(service_name):
+    services = utils.cmd_exec("aws ecs list-services --cluster " + service_name)
+    services = json.loads(services)
+    return services['serviceArns']
+
+
+def tasks_in_cluster(cluster_name, service_name):
+    tasks = utils.cmd_exec("aws ecs list-tasks --cluster " + cluster_name + " --service-name " + service_name)
+    tasks = json.loads(tasks)
+    return tasks['taskArns']
+
+
+def get_index_input(list, query):
+    print("Select one " + query + " from the list: \n")
+    index = 1
+    for item in list:
+        print(str(index) + ". " + item.split('/')[1])
+        index = index + 1; 
     
-    
+    index = int(raw_input("\nYour Options? : "))
+    print("Options? : " + query + " : " + list[index - 1]);
+    return list[index - 1].split('/')[1]
+
+
+      
 def deploy():
-    build_number = "10"
-    region = "ap-south-1"
-    service_name = "docker-ecs-boot-service"
-    cluster = "ecs-cluster3"
+    clusters = cluster_list()
+    cluser_name = get_index_input(clusters, "Cluster");
     
-    image_version = "v_" + build_number
-    task_family = "docker_ecs_app_image"
+    services = services_in_cluster(cluser_name)
+    service_name = get_index_input(services, "Service");
     
-    cluster = sys.argv[2]
-    service_name = sys.argv[3]
-    image_version = sys.argv[4]
+    tasks = tasks_in_cluster(cluser_name, service_name)
     
-    cluster_list()
+    task_name = get_index_input(tasks, "Task");
+    utils.running_cmd("ecs-cli logs -c " + cluser_name + " --task-id " + task_name + " --follow")
     
     """
+    image_version = "v_" + build_number
+    task_family = "docker_ecs_app_image"
     last_task_def_name = get_last_task_definations(task_family)
     task_def_json = get_task_defination_json(last_task_def_name)
     task_def_json = update_task_image_version(task_def_json, image_version)
@@ -65,10 +89,9 @@ def find_ip():
     instanceToSearch = sys.argv[2];
     
     found_instance = {};
-    print ("Searching the pattern : "+ instanceToSearch)
+    print ("Searching the pattern : " + instanceToSearch)
     reservations = ec2_instances['Reservations'];
     for reservation in reservations:
-        print("-------------------------------------------------------------------------")
         instances = reservation['Instances']
         for instance in instances:
             tags = instance['Tags'];
@@ -77,13 +100,15 @@ def find_ip():
                 tagKey = json.dumps(tag['Key']);
                 tagValue = json.dumps(tag['Value']);
                 if instanceToSearch in tagValue :
-                    print("Value  : " + tagValue )
+                    print("Value  : " + tagValue)
                     found_instance = instance;
                     break
     
-    ip_address  = found_instance['NetworkInterfaces'][0]['Association']['PublicIp'];
+    ip_address = found_instance['NetworkInterfaces'][0]['Association']['PublicIp'];
     
     print (ip_address)
+
+
     # print( "List of instances : \n " + json.dumps(instances['Reservations'], indent=4))
 def add_in_etc_hosts():  
     ip_address = find_ip()

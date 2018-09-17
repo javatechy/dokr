@@ -1,18 +1,26 @@
 import sys
 import os
-
+import subprocess
+import shlex
 
 def cmd_exec(str):
     print("\n------------------------ Executing Command: Start ------------------------")
-    print("\n$>>"+str);
+    print("\n$>>" + str);
     output = os.popen(str).read().strip();
-    #print("\n$>>" + output);
+    # print("\n$>>" + output);
     print("\n------------------------ Executing Command: End ------------------------")
     return os.popen(str).read().strip()
 
 
 def join_me(stringList):
     return "".join(string for string in stringList)
+
+
+def running_cmd(cmd):
+    print("Running command: \n")
+    print(cmd)
+    subprocess.call(cmd.split(" "))
+
 
 def helper():
     print('\n------------------------ Command Options ------------------------')
