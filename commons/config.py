@@ -7,6 +7,7 @@ pth = os.getcwd() + "/commons/config.json";
 
     
 def read_config():
+    logging.info("pth" + pth)
     with open(pth) as json_file:  
         data = json.load(json_file)
     return data

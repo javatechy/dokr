@@ -1,4 +1,4 @@
 {
-    "debug": true
-    "level" : "INFO"
+    "debug": true, 
+    "level": "INFO"
 }
