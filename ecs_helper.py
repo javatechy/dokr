@@ -5,7 +5,6 @@ import utils.helper as utils
 import commons.config as config
 import commons.constant as const
 
-
 def login_ecs():
     login = utils.cmd_exec("aws ecr get-login   | sed  's/-e none//g'")
     utils.cmd_exec(login)
@@ -74,7 +73,6 @@ def check_aws_cli():
 
 
 def deploy():
-    
     config.enable_debugging()
     check_aws_cli()
     # Keep presets
@@ -126,9 +124,3 @@ def find_ip():
     
     ip_address = found_instance['NetworkInterfaces'][0]['Association']['PublicIp'];
     print (ip_address)
-
-    # print( "List of instances : \n " + json.dumps(instances['Reservations'], indent=4))
-def add_in_etc_hosts():  
-    ip_address = find_ip()
-    host_ip = ""
-    

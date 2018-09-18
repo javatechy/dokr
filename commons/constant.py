@@ -1,5 +1,11 @@
+import logging
+
 SLACK_URI = 'DOKR_SLACK_URI'
 
+LOGGING_LEVEL = {
+    'DEBUG' : logging.DEBUG,
+    'INFO' : logging.INFO
+    }
 # # ECS CLI  contants
 
 MAC_OS = 'mac'

@@ -3,13 +3,15 @@ import os
 import subprocess
 import shlex
 import constant as const
+import logging
+
 
 def cmd_exec(str):
-    print("\n------------------------ Executing Command: Start ------------------------")
-    print("\n$>>" + str);
+    logging.debug("\n------------------------ Executing Command: Start ------------------------")
+    logging.debug("\n$>>" + str);
     output = os.popen(str).read().strip();
     # print("\n$>>" + output);
-    print("\n------------------------ Executing Command: End ------------------------")
+    logging.debug("\n------------------------ Executing Command: End ------------------------")
     return os.popen(str).read().strip()
 
 
@@ -42,4 +44,5 @@ def helper():
     print('\ndokr lecs # ECS login')
     print('\ndokr tag searchPattern tagName # add a tag *tagName*on a image matching *searchPattern* ')
     print('\ndokr push searchPattern  # push all images matching the pattern')
+    logging.debug("Test Debug message")
     print('\n')

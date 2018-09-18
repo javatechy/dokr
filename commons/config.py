@@ -1,6 +1,7 @@
 import os 
 import json 
 import sys
+import logging
 
 pth = os.getcwd() + "/commons/config.json";
 
@@ -24,10 +25,16 @@ def enable_debugging():
 
 def set_env(key , value):
     data = read_config()
+    data[key] = value
     write_config(data)
 
 
 def get_env(key):
-    data = read_config()
-    return data['key']
+    return read_config()[key]
 
+
+def log_config():
+    level_input = sys.argv[2];
+    if level_input == 'DEBUG':
+        print level_input
+        logging.basicConfig(level=logging.DEBUG)

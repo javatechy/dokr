@@ -6,7 +6,8 @@ import ecs_helper as ecs;
 import sys;
 import docker_helper as docker;
 import machine_test  as mctest;
-    
+import commons.config as config 
+
 arg = sys.argv[1]
 
 
@@ -26,8 +27,10 @@ elif arg == 'push':
     docker.push_image();
 elif arg == 'mcstatus':
 	mctest.test_machine()
+elif arg == 'log':
+	config.log_config() 
 elif arg == 'deploy':
-	ecs.deploy() 
+	ecs.deploy()
 else:
     utils.helper();
     
