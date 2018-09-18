@@ -1,8 +1,9 @@
 import sys
 import os
-import utils.helper as utils
 import json
-import constant as const
+import utils.helper as utils
+import commons.config as config
+import commons.constant as const
 
 
 def login_ecs():
@@ -73,6 +74,8 @@ def check_aws_cli():
 
 
 def deploy():
+    
+    config.enable_debugging()
     check_aws_cli()
     # Keep presets
     clusters = cluster_list()
@@ -122,9 +125,7 @@ def find_ip():
                     break
     
     ip_address = found_instance['NetworkInterfaces'][0]['Association']['PublicIp'];
-    
     print (ip_address)
-
 
     # print( "List of instances : \n " + json.dumps(instances['Reservations'], indent=4))
 def add_in_etc_hosts():  

@@ -3,8 +3,8 @@ import os
 import utils.helper as utils
 import utils.http_client as request
 import json
-import config
-import constant
+import commons.config as config
+import commons.constant as constant
 
 
 def get_slack_url():
