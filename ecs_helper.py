@@ -2,6 +2,7 @@ import sys
 import os
 import utils.helper as utils
 import json
+import constant as const
 
 
 def login_ecs():
@@ -57,8 +58,23 @@ def get_index_input(list, query):
     return list[index - 1].split('/')[1]
 
 
-      
+def check_aws_cli():
+    system_name = utils.get_system_type();
+    path = const.ECS_CLI_PATH_MAP[system_name]
+    
+    print("system_name  : " + system_name + " \n Checking path : " + path)
+    
+    exists = os.path.isfile(path)
+    
+    if exists:
+        print("ECS cli is Installed")
+    else:
+        print(const.ECS_CLI_INSTRUCTIONS)
+
+
 def deploy():
+    check_aws_cli()
+    # Keep presets
     clusters = cluster_list()
     cluser_name = get_index_input(clusters, "Cluster");
     
@@ -68,6 +84,7 @@ def deploy():
     tasks = tasks_in_cluster(cluser_name, service_name)
     
     task_name = get_index_input(tasks, "Task");
+    
     utils.running_cmd("ecs-cli logs -c " + cluser_name + " --task-id " + task_name + " --follow")
     
     """

@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 import shlex
+import constant as const
 
 def cmd_exec(str):
     print("\n------------------------ Executing Command: Start ------------------------")
@@ -20,6 +21,18 @@ def running_cmd(cmd):
     print("Running command: \n")
     print(cmd)
     subprocess.call(cmd.split(" "))
+
+
+def get_system_type():
+    platform = sys.platform;
+    system_name = "NA";
+    if platform == "linux" or platform == "linux2":
+       system_name = const.LINUX_OS
+    elif platform == "darwin":
+        system_name = const.MAC_OS
+    elif platform == "win32":
+        system_name = const.WINDOWS_OS
+    return system_name;
 
 
 def helper():
