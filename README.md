@@ -42,3 +42,12 @@ dokr tag pattern_xxx tag_name
 ```
 dokr push pattern_xxx
 ```
+
+
+###Development:
+
++ Clean ununsed: `rm -rf build/ dist/ *egg* **.pyc __pycache__`
++ Build package: `python setup.py bdist_wheel`
++ deploy package: `python -m twine upload dist/*`
+
+follow this link for more details https://dzone.com/articles/executable-package-pip-install
