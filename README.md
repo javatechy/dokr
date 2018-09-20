@@ -56,7 +56,7 @@ dokr log
 
 
 
-###Development:
+### Development:
 
 + Clean ununsed: `rm -rf build/ dist/ *egg* **.pyc __pycache__`
 + Build package: `python setup.py bdist_wheel`
