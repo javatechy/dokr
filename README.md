@@ -46,11 +46,17 @@ dokr push pattern_xxx
 
 #### Check ecs logs -  this command will ask for cluster/service and task defination.
 
-- :computer: Install ecs-cli before running this command  from here:
+- Install ecs-cli before running this command  from here:
 	  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
 
 ```
 dokr log
+```
+
+#### Check current public ip of a machine on AWS
+
+```
+dokr ip searchpattern
 ```
 
 
