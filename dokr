@@ -28,7 +28,7 @@ elif arg == 'push':
 elif arg == 'mcstatus':
 	mctest.test_machine()
 elif arg == 'log':
-	config.log_config() 
+	ecs.ecs_log() 
 elif arg == 'deploy':
 	ecs.deploy()
 else:

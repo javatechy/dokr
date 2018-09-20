@@ -2,18 +2,16 @@ import sys
 import os
 import subprocess
 import shlex
-import constant as const
-import logging
+import commons.constant as const
 
 
 def cmd_exec(str):
-    logging.debug("\n------------------------ Executing Command: Start ------------------------")
-    logging.debug("\n$>>" + str);
+    print("\n------------------------ Executing Command: Start ------------------------")
+    print("\n$>>" + str);
     output = os.popen(str).read().strip();
-    # print("\n$>>" + output);
-    logging.debug("\n------------------------ Executing Command: End ------------------------")
+    print("\n$>>" + output);
+    print("\n------------------------ Executing Command: End ------------------------")
     return os.popen(str).read().strip()
-
 
 def join_me(stringList):
     return "".join(string for string in stringList)
@@ -44,5 +42,8 @@ def helper():
     print('\ndokr lecs # ECS login')
     print('\ndokr tag searchPattern tagName # add a tag *tagName*on a image matching *searchPattern* ')
     print('\ndokr push searchPattern  # push all images matching the pattern')
-    logging.debug("Test Debug message")
+    print('\ndokr ip searchPattern  # push all images matching the pattern')
+    print('\ndokr push searchPattern  # push all images matching the pattern')
+    print("\ndokr ip searchPattern # Find Ip from your aws machine")
+    print("\ndokr log # For cluster->service->task logging. Provided ecs-cli is installed")
     print('\n')

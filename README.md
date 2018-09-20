@@ -44,6 +44,18 @@ dokr push pattern_xxx
 ```
 
 
+#### Check ecs logs -  this command will ask for cluster/service and task defination.
+
+- :computer: Install ecs-cli before running this command  from here:
+	  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
+
+```
+dokr log
+```
+
+
+
+
 ###Development:
 
 + Clean ununsed: `rm -rf build/ dist/ *egg* **.pyc __pycache__`

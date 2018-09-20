@@ -35,7 +35,8 @@ def get_env(key):
 
 
 def log_config():
-    level_input = sys.argv[2];
+   # level_input = sys.argv[2];
+    level_input = 'DEBUG';
     if level_input == 'DEBUG':
         print level_input
         logging.basicConfig(level=logging.DEBUG)

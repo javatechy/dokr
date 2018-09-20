@@ -5,6 +5,7 @@ import utils.helper as utils
 import commons.config as config
 import commons.constant as const
 
+
 def login_ecs():
     login = utils.cmd_exec("aws ecr get-login   | sed  's/-e none//g'")
     utils.cmd_exec(login)
@@ -47,31 +48,46 @@ def tasks_in_cluster(cluster_name, service_name):
 
 
 def get_index_input(list, query):
-    print("Select one " + query + " from the list: \n")
+    if len(list) == 0:
+        print("\n" + query + " list  size is 0 !! Exiting program\n");
+        exit()  
+    print("\nSelect one " + query + " from the list: \n")
     index = 1
     for item in list:
         print(str(index) + ". " + item.split('/')[1])
         index = index + 1; 
     
     index = int(raw_input("\nYour Options? : "))
-    print("Options? : " + query + " : " + list[index - 1]);
+    print("\nSelected Input for " + query + " : " + list[index - 1]);
     return list[index - 1].split('/')[1]
 
 
 def check_aws_cli():
     system_name = utils.get_system_type();
     path = const.ECS_CLI_PATH_MAP[system_name]
-    
-    print("system_name  : " + system_name + " \n Checking path : " + path)
-    
     exists = os.path.isfile(path)
     
-    if exists:
-        print("ECS cli is Installed")
-    else:
+    if exists == False:
+        print("Checked path : " + path + " on " + system_name)
         print(const.ECS_CLI_INSTRUCTIONS)
 
 
+def ecs_log():
+    config.enable_debugging()
+    check_aws_cli()
+    
+    clusters = cluster_list()
+    cluser_name = get_index_input(clusters, "Cluster");
+    
+    services = services_in_cluster(cluser_name)
+    service_name = get_index_input(services, "Service");
+    
+    tasks = tasks_in_cluster(cluser_name, service_name)
+    task_name = get_index_input(tasks, "Task");
+    
+    utils.running_cmd("ecs-cli logs -c " + cluser_name + " --task-id " + task_name + " --follow")
+
+    
 def deploy():
     config.enable_debugging()
     check_aws_cli()
