@@ -2,7 +2,8 @@ import os
 import json 
 import sys
 import logging
-
+import pkg_resources  # part of setuptools
+   
 pth = os.getcwd() + "/commons/config.json";
 
     
@@ -40,3 +41,7 @@ def log_config():
     if level_input == 'DEBUG':
         print(level_input)
         logging.basicConfig(level=logging.DEBUG)
+        
+def find_version():
+    version = pkg_resources.require("dokr")[0].version  
+    print (version)      

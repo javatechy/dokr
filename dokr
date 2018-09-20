@@ -5,7 +5,6 @@ import utils.helper as utils;
 import ecs_helper as ecs;
 import sys;
 import docker_helper as docker;
-import machine_test  as mctest;
 import commons.config as config 
 
 arg = sys.argv[1]
@@ -31,6 +30,8 @@ elif arg == 'log':
 	ecs.ecs_log() 
 elif arg == 'deploy':
 	ecs.deploy()
+elif arg == '--version':
+	config.find_version()
 else:
     utils.helper();
     
