@@ -14,9 +14,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/javatechy/dokr",
     packages=setuptools.find_packages(),
-    py_modules=['ecs_helper', 'docker_helper','slack_api'],
+    py_modules=['ecs_helper', 'docker_helper', 'slack_api'],
     install_requires=[
-        'requests','click'
+        'requests', 'click'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

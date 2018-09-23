@@ -59,6 +59,11 @@ dokr log
 dokr ip searchpattern
 ```
 
+#### Deploy an image on a task
+
+```
+dokr deploy cluster_name service_name tag_name
+```
 
 ### Development:
 

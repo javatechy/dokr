@@ -3,37 +3,14 @@ import json
 import sys
 import logging
 import pkg_resources  # part of setuptools
-   
-pth = os.getcwd() + "/commons/config.json";
-
-
-    
-def read_config():
-    logging.info("pth" + pth)
-    with open(pth) as json_file:  
-        data = json.load(json_file)
-    return data
-
-
-def write_config(data):
-    with open(pth, 'w') as outfile: 
-        json.dump(data, outfile, indent=4)
-
-
-def enable_debugging():
-    data = read_config()
-    data['debug'] = True
-    write_config(data)
 
 
 def set_env(key , value):
-    data = read_config()
-    data[key] = value
-    write_config(data)
+    pass
 
 
 def get_env(key):
-    return read_config()[key]
+    return ''
 
 
 def log_config():
@@ -41,6 +18,7 @@ def log_config():
     if level_input == 'DEBUG':
         print(level_input)
         logging.basicConfig(level=logging.DEBUG)
+
         
 def find_version():
     version = pkg_resources.require("dokr")[0].version  
