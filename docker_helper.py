@@ -32,6 +32,7 @@ def push_image():
         print(utils.cmd_exec('docker push ' + tag))
 
 def clean_up():
+    print ("name is  "+ name)
     search_pattern = sys.argv[2];
     print('\nCleaning Old Images  matching pattern ', search_pattern)
     print('\n----------  Cleaning Old Images ---- \n')

@@ -11,7 +11,7 @@ def login_ecs():
     utils.cmd_exec(login)
 
 
-def get_last_task_definations(family_prefix):
+def get_latest_task_definations(family_prefix):
     task_definations = utils.cmd_exec("aws ecs list-task-definitions --family-prefix " + family_prefix);
     return json.loads(task_definations)['taskDefinitionArns'][-1]
 
@@ -26,7 +26,7 @@ def update_task_image_version(task_def_json, version_number):
     imageName = imageName.split(':')[0] + ':' + version_number
     task_def_json['taskDefinition']['containerDefinitions'][0]['image'] = imageName;
     print (json.dumps(task_def_json, indent=4))
-    return task_def_json;
+    return task_def_json['taskDefinition'];
 
 
 def cluster_list():
@@ -77,44 +77,53 @@ def ecs_log():
     check_aws_cli()
     
     clusters = cluster_list()
-    cluser_name = get_index_input(clusters, "Cluster");
+    cluster_name = get_index_input(clusters, "Cluster");
     
-    services = services_in_cluster(cluser_name)
+    services = services_in_cluster(cluster_name)
     service_name = get_index_input(services, "Service");
     
-    tasks = tasks_in_cluster(cluser_name, service_name)
+    tasks = tasks_in_cluster(cluster_name, service_name)
     task_name = get_index_input(tasks, "Task");
     
-    utils.running_cmd("ecs-cli logs -c " + cluser_name + " --task-id " + task_name + " --follow")
+    utils.running_cmd("ecs-cli logs -c " + cluster_name + " --task-id " + task_name + " --follow")
 
+
+def clean_task_defination(task_json):
+    del task_json['status']
+    del task_json['requiresAttributes']
+    del task_json['taskDefinitionArn']
+    del task_json['compatibilities']
+    del task_json['revision']
+    return task_json
+
+
+def register_task(task_family, task_def_json):
+    utils.cmd_exec("aws ecs register-task-definition --family " + task_family + " --cli-input-json \"" + json.dumps(task_def_json).replace('"', '\\"').replace('\n', '\\n') + "\"")
+
+
+def get_task_family(cluster_name, service_name):
+    service_json = utils.cmd_exec("aws ecs describe-services --cluster " + cluster_name + " --service " + service_name)
+    service_json = json.loads(service_json)
+    return service_json['services'][0]['deployments'][0]['taskDefinition'].split("/")[1]
     
+      
 def deploy():
-    config.enable_debugging()
-    check_aws_cli()
-    # Keep presets
-    clusters = cluster_list()
-    cluser_name = get_index_input(clusters, "Cluster");
+    cluster_name = sys.argv[2]
+    service_name = sys.argv[3]
+    image_version = sys.argv[4]
     
-    services = services_in_cluster(cluser_name)
-    service_name = get_index_input(services, "Service");
-    
-    tasks = tasks_in_cluster(cluser_name, service_name)
-    
-    task_name = get_index_input(tasks, "Task");
-    
-    utils.running_cmd("ecs-cli logs -c " + cluser_name + " --task-id " + task_name + " --follow")
-    
-    """
-    image_version = "v_" + build_number
-    task_family = "docker_ecs_app_image"
-    last_task_def_name = get_last_task_definations(task_family)
+    task_family = get_task_family(cluster_name, service_name)
+    print("Task Family : " + task_family)
+    task_family = task_family.split(":")[0]
+    last_task_def_name = get_latest_task_definations(task_family)
     task_def_json = get_task_defination_json(last_task_def_name)
     task_def_json = update_task_image_version(task_def_json, image_version)
-    print ('Last Updated Task definations : ' + json.dumps(task_def_json, indent=4))
-    # Create a new task definition for this build
-    # aws ecs register-task-definition --family docker_ecs_app_image --cli-input-json file://docker_boot_app-v_8.json
-    utils.cmd_exec("aws ecs register-task-definition --family " + task_family + " --cli-input-json " + json.dumps(task_def_json) )    
-    """
+    older_revision = json.dumps(task_def_json['revision'])
+    new_revision = str(int(older_revision) + 1);
+    task_def_json = clean_task_defination(task_def_json)
+    print ('Updated JSON of Task definations : ' + json.dumps(task_def_json, indent=4))
+    register_task(task_family, task_def_json)
+    utils.cmd_exec("aws ecs update-service --cluster " + cluster_name + " --region ap-south-1 --service " + service_name + " --task-definition " + task_family + ":" + new_revision)
 
     
 def find_ip():

@@ -60,8 +60,6 @@ dokr ip searchpattern
 ```
 
 
-
-
 ### Development:
 
 + Clean ununsed: `rm -rf build/ dist/ *egg* **.pyc __pycache__`

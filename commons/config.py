@@ -6,6 +6,7 @@ import pkg_resources  # part of setuptools
    
 pth = os.getcwd() + "/commons/config.json";
 
+
     
 def read_config():
     logging.info("pth" + pth)
@@ -36,7 +37,6 @@ def get_env(key):
 
 
 def log_config():
-   # level_input = sys.argv[2];
     level_input = 'DEBUG';
     if level_input == 'DEBUG':
         print(level_input)

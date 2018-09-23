@@ -16,7 +16,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     py_modules=['ecs_helper', 'docker_helper','slack_api'],
     install_requires=[
-        'requests'
+        'requests','click'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
