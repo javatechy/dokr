@@ -73,7 +73,6 @@ def check_aws_cli():
 
 
 def ecs_log():
-    config.enable_debugging()
     check_aws_cli()
     
     clusters = cluster_list()

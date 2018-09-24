@@ -63,7 +63,7 @@ def ecs(cluster, service, lecs):
         utils.helper();
 
 
-dokecs.add_command(docker)
+dokecs.add_command(dock)
 dokecs.add_command(ecs)
 dokecs.add_command(aws)
 
