@@ -43,7 +43,7 @@ dokr ecs log
 #### Prune docker system
 
 ```
-dokr dock clean-all
+dokr dock --clean-all
 ```
 ![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_dock_clean_all.png)
 
@@ -51,23 +51,30 @@ dokr dock clean-all
 #### Delete all the images matching the pattern
 
 ```
-dokr clean pattern_xxx
+dokr dock --clean pattern_xxx
 ```
-![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_dock_clean.png)
 
 
 #### Add a tag to the existing image matching the provided pattern  (for latest tag only)
 
 ```
-dokr tag pattern_xxx tag_name
+dokr dock --tag pattern_xxx tag_name
 ```
-![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_dock_tag.png)
+
+#### Add a tag to the existing image matching the provided pattern  (for latest tag only)
+
+```
+dokr ecs log
+```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_ecs_log.png)
 
 
 #### Push all images on a system matching a pattern
 
 ```
-dokr push pattern_xxx
+dokr dock --push hello
 ```
 ![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
 
