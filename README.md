@@ -2,18 +2,37 @@
 
 A Helper pip package for docker and ECS tasks
 
-
-#### Check The options Available
-
-```
-dokr help
-```
+## ECS Options
 
 #### login into ecs directly (Assuming awscli is installed and configured)
 
 ```
-dokr lecs
+dokr ecs login
 ```
+
+#### Deploy an image on a task
+
+```
+dokr ecs deploy --cluster cluster_name --service service_name --tag image_version
+```
+
+
+#### Check The options Available
+```
+dokr ecs login
+```
+
+
+
+#### Check ecs logs -  this command will ask for cluster/service and task defination.
+
+- Install ecs-cli before running this command  from here:
+	  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
+
+```
+dokr ecs log
+```
+
 
 
 #### Prune docker system
@@ -44,26 +63,13 @@ dokr push pattern_xxx
 ```
 
 
-#### Check ecs logs -  this command will ask for cluster/service and task defination.
-
-- Install ecs-cli before running this command  from here:
-	  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
-
-```
-dokr log
-```
 
 #### Check current public ip of a machine on AWS
 
 ```
-dokr ip searchpattern
+dokr aws --ip jenkins 
 ```
 
-#### Deploy an image on a task
-
-```
-dokr deploy cluster_name service_name tag_name
-```
 
 ### Development:
 

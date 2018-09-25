@@ -2,36 +2,83 @@
 from __future__ import absolute_import
 
 import utils.helper as utils;
-import ecs_helper as ecs;
+import ecs_helper as ecs_helper;
 import sys;
 import docker_helper as docker;
 import commons.config as config 
+import pkg_resources
+import click
+import logging
 
-arg = sys.argv[1]
-
-
-if arg == 'clean':
-    docker.clean_up();
-elif arg == 'deploy' :
-    ecs.deploy();
-elif arg == 'clean-all':
-    docker.clean_all();
-elif arg == 'lecs':
-    ecs.login_ecs()
-elif arg == 'tag':
-    docker.add_build_tag()
-elif arg == 'ip':
-    ecs.find_ip()
-elif arg == 'push':  
-    docker.push_image();
-elif arg == 'mcstatus':
-	mctest.test_machine()
-elif arg == 'log':
-	ecs.ecs_log() 
-elif arg == 'deploy':
-	ecs.deploy()
-elif arg == '--version':
-	config.find_version()
-else:
-    utils.helper();
+VERSION = pkg_resources.require("dokr")[0].version  
     
+
+@click.group()
+@click.version_option(version=VERSION, prog_name='dokr')
+def dokecs():  # pragma: no cover
+    pass
+
+
+@click.command()
+@click.option('--ip', help='find Ip of a machine based on the given pattern')
+@click.option('--v', count=True, help='Enable verbose logging')
+def aws(ip):
+    debug_logging(v)
+    if ip != None :
+        ecs_helper.find_ip(ip)
+
+
+@click.command()
+@click.option('--clean', help='delete all images from your local docker matching the pattern')
+@click.option('--clean-all' , count=True, help='Clean the whole docker system')
+@click.option('--push', help='Push Image matching a pattern')
+@click.option('--tag', type=(str, str), multiple=True, help='Add a tag given to an image --tag <tag_name> <image_name>')
+@click.option('--v', count=True, help='Enable verbose logging')
+def dock(clean, clean_all, push, tag, v):
+    debug_logging(v)
+    if clean != None :
+         docker.clean_up(clean);
+    if tag != None :
+        for (key, value) in tag:
+            docker.add_build_tag(key, value)
+    if clean_all == 1 :
+         docker.clean_all();
+    if push != None :
+        docker.push_image(push);
+
+
+@click.command()
+@click.argument('login', required=False)
+@click.argument('deploy', required=False)
+@click.argument('log', required=False)
+@click.option('--cluster', help='Name of your cluster')
+@click.option('--service', help='Name of your service')
+@click.option('--tag', help='Tag of your image')
+@click.option('--v', count=True, help='Enable verbose logging')
+def ecs(login, deploy, log , cluster, service, tag, v):
+    debug_logging(v)  
+    if login == 'login' :
+        ecs_helper.login_ecs()
+    if login == 'deploy' :
+        if cluster == None:
+            cluster = click.prompt('Give a cluster Name ', type=str)
+        if service == None:
+            service = click.prompt('Give a Service Name', type=str)
+        if tag == None:
+            tag = click.prompt('Give a Tag Name', type=str)
+        ecs_helper.deploy(cluster, service, tag);
+    if login == 'log' :
+	    ecs_helper.ecs_log()
+
+
+def debug_logging(verbose):
+    if verbose == 1:
+        logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+
+
+dokecs.add_command(dock)
+dokecs.add_command(ecs)
+dokecs.add_command(aws)
+
+if __name__ == '__main__':  # pragma: no cover
+    dokecs()

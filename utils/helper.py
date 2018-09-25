@@ -3,16 +3,15 @@ import os
 import subprocess
 import shlex
 import commons.constant as const
-import logger
+import utils.logger as logger
 
 
 def cmd_exec(str):
-    
-    logger.log_c("\n------------------------ Executing Command: Start ------------------------")
-    logger.log("\n$>>" + str)    
+    logger.debug("\n------------------------ Executing Command: Start ------------------------")
+    logger.debug("\n$>>" + str)    
     output = os.popen(str).read().strip()
-    logger.log("\n$>>" + output)
-    logger.log("\n------------------------ Executing Command: END ------------------------")
+    logger.debug("\n$>>" + output)
+    logger.debug("\n------------------------ Executing Command: END ------------------------")
     return os.popen(str).read().strip()
 
 
@@ -21,13 +20,14 @@ def join_me(stringList):
 
 
 def running_cmd(cmd):
-    print("Running command: \n")
-    print(cmd)
+    logger.log_c("Running command: \n")
+    logger.info(cmd)
     subprocess.call(cmd.split(" "))
 
 
 def get_system_type():
     platform = sys.platform;
+    logger.debug("Platform : " + platform)
     system_name = "NA";
     if platform == "linux" or platform == "linux2":
        system_name = const.LINUX_OS
@@ -35,6 +35,8 @@ def get_system_type():
         system_name = const.MAC_OS
     elif platform == "win32":
         system_name = const.WINDOWS_OS
+        
+    logger.debug("System Name : " + system_name)
     return system_name;
 
 
