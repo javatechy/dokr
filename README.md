@@ -7,7 +7,7 @@ A Helper pip package for docker and ECS tasks. This pip package helps you automa
 
 + Assuming python is installed on your system.
 + Docker is installed on your system
-+ [aws-cli](https://github.com/user/repo/blob/branch/other_file.md)  is installed and credentials are configured on your system.
++ [aws-cli](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)  is installed and credentials are configured on your system.
 + [ecs-cli](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html) is installed on system [*For Log Command only*]
 
 
