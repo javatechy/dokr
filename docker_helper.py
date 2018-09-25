@@ -3,9 +3,7 @@ import os
 import utils.helper as utils;
 
 
-def add_build_tag():
-    search_pattern = sys.argv[2];
-    tag_name = sys.argv[3];
+def add_build_tag(search_pattern, tag_name):
     print("\nSearching pattern: *" + search_pattern + "* and adding tag " + tag_name)
     image_name = utils.cmd_exec("docker images | cut -d ' '  -f1 | grep " + search_pattern + " | head -1");
     print("\nFound this image name from the given pattern : " + image_name)
@@ -15,8 +13,7 @@ def add_build_tag():
     utils.cmd_exec('docker images')
 
   
-def push_image():
-    search_pattern = sys.argv[2];
+def push_image(search_pattern):
     print("\nPushing images matching pattern : " + search_pattern)
     image_name = utils.cmd_exec("docker images | cut -d ' '  -f1 | grep " + search_pattern + " | head -1");
     print("\nFound this image name from the given pattern : " + image_name)
@@ -31,8 +28,7 @@ def push_image():
         print(utils.cmd_exec('docker push ' + tag))
 
 
-def clean_up():
-    search_pattern = sys.argv[2];
+def clean_up(search_pattern):
     print('\nCleaning Old Images  matching pattern ', search_pattern)
     print('\n----------  Cleaning Old Images ---- \n')
     utils.cmd_exec("docker images -a | grep " + search_pattern + " | awk '{print $3}' | xargs docker rmi -f")

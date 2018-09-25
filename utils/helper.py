@@ -3,15 +3,18 @@ import os
 import subprocess
 import shlex
 import commons.constant as const
+import logger
 
 
 def cmd_exec(str):
-    print("\n------------------------ Executing Command: Start ------------------------")
-    print("\n$>>" + str);
-    output = os.popen(str).read().strip();
-    print("\n$>>" + output);
-    print("\n------------------------ Executing Command: End ------------------------")
+    
+    logger.log_c("\n------------------------ Executing Command: Start ------------------------")
+    logger.log("\n$>>" + str)    
+    output = os.popen(str).read().strip()
+    logger.log("\n$>>" + output)
+    logger.log("\n------------------------ Executing Command: END ------------------------")
     return os.popen(str).read().strip()
+
 
 def join_me(stringList):
     return "".join(string for string in stringList)
