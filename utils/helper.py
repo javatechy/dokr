@@ -1,7 +1,8 @@
-import sys
 import os
-import subprocess
 import shlex
+import subprocess
+import sys
+
 import commons.constant as const
 import utils.logger as logger
 
@@ -20,8 +21,7 @@ def join_me(stringList):
 
 
 def running_cmd(cmd):
-    logger.log_c("Running command: \n")
-    logger.info(cmd)
+    logger.log_c("Running command: " , cmd)
     subprocess.call(cmd.split(" "))
 
 

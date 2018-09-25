@@ -22,7 +22,7 @@ def dokecs():  # pragma: no cover
 @click.command()
 @click.option('--ip', help='find Ip of a machine based on the given pattern')
 @click.option('--v', count=True, help='Enable verbose logging')
-def aws(ip):
+def aws(ip, v):
     debug_logging(v)
     if ip != None :
         ecs_helper.find_ip(ip)
@@ -32,7 +32,7 @@ def aws(ip):
 @click.option('--clean', help='delete all images from your local docker matching the pattern')
 @click.option('--clean-all' , count=True, help='Clean the whole docker system')
 @click.option('--push', help='Push Image matching a pattern')
-@click.option('--tag', type=(str, str), multiple=True, help='Add a tag given to an image --tag <tag_name> <image_name>')
+@click.option('--tag', type=(str, str), multiple=True, help='Add a tag given to an image --tag <image_search_key> <tag_name>')
 @click.option('--v', count=True, help='Enable verbose logging')
 def dock(clean, clean_all, push, tag, v):
     debug_logging(v)
