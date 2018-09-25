@@ -9,18 +9,22 @@ A Helper pip package for docker and ECS tasks
 ```
 dokr ecs login
 ```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_ecs_login.png)
+
 
 #### Deploy an image on a task
 
 ```
 dokr ecs deploy --cluster cluster_name --service service_name --tag image_version
 ```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_ecs_deploy.png)
 
 
 #### Check The options Available
 ```
 dokr ecs login
 ```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_ecs_login.png)
 
 
 
@@ -32,14 +36,16 @@ dokr ecs login
 ```
 dokr ecs log
 ```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
 
 
 
 #### Prune docker system
 
 ```
-dokr clean-all
+dokr dock clean-all
 ```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_dock_clean_all.png)
 
 
 #### Delete all the images matching the pattern
@@ -47,6 +53,7 @@ dokr clean-all
 ```
 dokr clean pattern_xxx
 ```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
 
 
 #### Add a tag to the existing image matching the provided pattern  (for latest tag only)
@@ -54,6 +61,7 @@ dokr clean pattern_xxx
 ```
 dokr tag pattern_xxx tag_name
 ```
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
 
 
 #### Push all images on a system matching a pattern
@@ -61,7 +69,7 @@ dokr tag pattern_xxx tag_name
 ```
 dokr push pattern_xxx
 ```
-
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
 
 
 #### Check current public ip of a machine on AWS
@@ -69,6 +77,9 @@ dokr push pattern_xxx
 ```
 dokr aws --ip jenkins 
 ```
+
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
+
 
 
 ### Development:
