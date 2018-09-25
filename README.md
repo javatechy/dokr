@@ -2,9 +2,17 @@
 
 A Helper pip package for docker and ECS tasks
 
+### Installation:
+
+- Required python version : 3.X
+
+```
+pip install dokr
+```
+
 ## ECS Options
 
-#### login into ecs directly (Assuming awscli is installed and configured)
++ login into ecs directly (Assuming awscli is installed and configured)
 
 ```
 dokr ecs login
@@ -12,7 +20,7 @@ dokr ecs login
 ![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_ecs_login.png)
 
 
-#### Deploy an image on a task
++ Deploy an image on a cluster 
 
 ```
 dokr ecs deploy --cluster cluster_name --service service_name --tag image_version
@@ -20,17 +28,9 @@ dokr ecs deploy --cluster cluster_name --service service_name --tag image_versio
 ![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_ecs_deploy.png)
 
 
-#### Check The options Available
-```
-dokr ecs login
-```
-![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_ecs_login.png)
++ Check ecs logs -  this command will ask for cluster/service and task defination.
 
-
-
-#### Check ecs logs -  this command will ask for cluster/service and task defination.
-
-- Install ecs-cli before running this command  from here:
+Note: Install ecs-cli before running this command  from here:
 	  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
 
 ```
@@ -74,9 +74,9 @@ dokr ecs log
 #### Push all images on a system matching a pattern
 
 ```
-dokr dock --push hello
+dokr dock --push lier
 ```
-![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_dock_push.png)
 
 
 #### Check current public ip of a machine on AWS
