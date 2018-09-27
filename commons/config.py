@@ -1,16 +1,73 @@
-import os 
 import json 
+import os 
+import pkg_resources
 import sys
-import logging
-import pkg_resources  # part of setuptools
+
+import configparser 
+
+import utils.logger as logger
 
 
-def set_env(key , value):
-    pass
+config = configparser.SafeConfigParser()
+
+debug_level = False;
+
+def get_config_path():
+    homedir = os.environ.get('HOME', None)
+    logger.debug("Home Directory: " + homedir)
+    if not homedir:
+        logger.log_r("Home Directory Not found!! Set Envirnoment `HOME` ")
+        exit()
+    logger.debug("Home Directory : " + homedir)
+    config_file = os.path.join(homedir + "/experiments/config")
+    logger.debug("Config File Location : " + config_file)
+    if not os.path.exists(config_file):
+        logger.log_r("ERROR: No aws credentials/config file present")
+        return
+    logger.debug(config.read(config_file))
+    return config_file;
 
 
-def get_env(key):
-    return ''
+config_file = get_config_path();
+
+ 
+def ask_for_new_profile():
+    add_profile('deepak')
+    print(get_env('fabhotelier', 'ecr_repository'))
+    print(set_env('fabhotelier', 'ecr_repository', 'My'))
+    print(set_env('deepak', 'ecr_repository', 'My'))
+
+
+def set_env(profile, key , value):
+     config.set(profile, key, value)
+     write_config()
+
+
+def add_profile(profile):
+    if config.has_section(profile):
+        logger.log_r(profile + " Section already exists!!")
+        return
+    
+    config.add_section(profile)
+    write_config()
+
+
+def write_config():
+    with open(config_file, 'w') as configfile:
+        config.write(configfile)
+
+
+def get_env(profile, key):
+    logger.debug("Searching in profile : " + profile)
+    logger.debug("Searching in key" + key)
+    if config.has_option(profile, key):
+        return config.get(profile, key)
+    logger.debug("Not found in current profile")
+    if config.has_option('default', key):
+        return config.get('default', key)
+    
+    logger.debug("No Value Found in DEAFULT SECTION as well")
+    exit()
 
 
 def log_config():

@@ -1,17 +1,26 @@
 #!/usr/bin/env python
 from __future__ import absolute_import
 
-import utils.helper as utils;
-import ecs_helper as ecs_helper;
-import sys;
-import docker_helper as docker;
-import commons.config as config 
-import pkg_resources
-import click
 import logging
+import pkg_resources
+import sys;
+
+import click
+
+import commons.config as config 
+import docker_helper as docker;
+import ecs_helper as ecs_helper;
+import utils.helper as utils;
+
 
 VERSION = pkg_resources.require("dokr")[0].version  
-    
+
+ 
+def debug_logging(verbose):
+    if verbose == 1:
+        click.echo(click.style("Debugging Level is set", fg='green'))
+        logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+
 
 @click.group()
 @click.version_option(version=VERSION, prog_name='dokr')
@@ -23,7 +32,6 @@ def dokecs():  # pragma: no cover
 @click.option('--ip', help='find Ip of a machine based on the given pattern')
 @click.option('--v', count=True, help='Enable verbose logging')
 def aws(ip, v):
-    debug_logging(v)
     if ip != None :
         ecs_helper.find_ip(ip)
 
@@ -71,14 +79,17 @@ def ecs(login, deploy, log , cluster, service, tag, v):
 	    ecs_helper.ecs_log()
 
 
-def debug_logging(verbose):
-    if verbose == 1:
-        logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+@click.command()
+@click.option('--v', count=True, help='Enable verbose logging')
+def configure(v):
+    debug_logging(v)
+    config.ask_for_new_profile();
 
 
 dokecs.add_command(dock)
 dokecs.add_command(ecs)
 dokecs.add_command(aws)
+dokecs.add_command(configure)
 
 if __name__ == '__main__':  # pragma: no cover
     dokecs()

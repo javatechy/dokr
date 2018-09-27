@@ -1,11 +1,12 @@
 import setuptools
 
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name='dokr',
-    version='1.4',
+    version='1.6',
     scripts=['dokr'] ,
     author="Deepak Kumar",
     author_email="deepak.kumar.iet@gmail.com",
@@ -16,7 +17,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     py_modules=['ecs_helper', 'docker_helper', 'slack_api'],
     install_requires=[
-        'requests', 'click'
+        'requests', 'click', 'configparser'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
