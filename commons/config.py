@@ -2,15 +2,14 @@ import json
 import os 
 import pkg_resources
 import sys
+import click
 
 import configparser 
 
 import utils.logger as logger
 
-
 config = configparser.SafeConfigParser()
 
-debug_level = False;
 
 def get_config_path():
     homedir = os.environ.get('HOME', None)
@@ -19,11 +18,20 @@ def get_config_path():
         logger.log_r("Home Directory Not found!! Set Envirnoment `HOME` ")
         exit()
     logger.debug("Home Directory : " + homedir)
-    config_file = os.path.join(homedir + "/experiments/config")
+    config_file = os.path.join(homedir + "/.dokr/config")
     logger.debug("Config File Location : " + config_file)
     if not os.path.exists(config_file):
-        logger.log_r("ERROR: No aws credentials/config file present")
-        return
+        logger.log_r("ERROR: No Config file present")
+        try:
+            os.makedirs(os.path.dirname(config_file))
+        except OSError as exc:  # Guard against race condition
+            logger.log_r("Directory found! but not config file")
+            
+        logger.debug("Creating config file")
+        file = open(config_file, "w") 
+        file.write("[default]") 
+        file.close() 
+        
     logger.debug(config.read(config_file))
     return config_file;
 
@@ -67,7 +75,12 @@ def get_env(profile, key):
         return config.get('default', key)
     
     logger.debug("No Value Found in DEAFULT SECTION as well")
+    logger.log_r('Value not found in [Default Profile] use `dokr configure`comamnd')
     exit()
+
+    
+def get_profiles():
+    return config.sections()
 
 
 def log_config():
@@ -76,7 +89,8 @@ def log_config():
         print(level_input)
         logging.basicConfig(level=logging.DEBUG)
 
-        
+
 def find_version():
     version = pkg_resources.require("dokr")[0].version  
     print (version)      
+

@@ -1,5 +1,6 @@
 import click
-import logging
+
+debug_logging = False;
 
 all_colors = 'black', 'red', 'green', 'yellow', 'blue', 'magenta', \
              'cyan', 'white', 'bright_black', 'bright_red', \
@@ -18,8 +19,10 @@ def log_c(*argv):
 def log_r(str2):  
     click.echo(click.style(str2, fg='red'))
 
+
 def log_g(str2):  
     click.echo(click.style(str2, fg='green'))
+
 
 def log_y(str2):  
     click.echo(click.style(str2, fg='yellow'))
@@ -31,12 +34,20 @@ def log_bl(str2):
 
 # Colored logging
 def debug(str):
-    logging.debug(str)
+    if debug_logging :
+        click.secho((str))
 
 
 # Colored logging
-def debug_c(str):  
-    logging.debug(str)
+def debug_c(str): 
+    if debug_logging: 
+        click.echo(click.style(str, fg='blue'))
+
+
+# Colored logging
+def enable_debug(): 
+    global debug_logging 
+    debug_logging = True
 
 
 # Simple logging    

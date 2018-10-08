@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import absolute_import
 
-import logging
+import utils.logger as logger
 import pkg_resources
 import sys;
 
@@ -12,14 +12,13 @@ import docker_helper as docker;
 import ecs_helper as ecs_helper;
 import utils.helper as utils;
 
-
 VERSION = pkg_resources.require("dokr")[0].version  
 
  
 def debug_logging(verbose):
     if verbose == 1:
         click.echo(click.style("Debugging Level is set", fg='green'))
-        logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+        logger.enable_debug()
 
 
 @click.group()
@@ -80,16 +79,33 @@ def ecs(login, deploy, log , cluster, service, tag, v):
 
 
 @click.command()
+@click.option('--app', help='Enable verbose logging')
 @click.option('--v', count=True, help='Enable verbose logging')
-def configure(v):
+def configure(app, v):
     debug_logging(v)
-    config.ask_for_new_profile();
+    if app != None :
+        docker.add_profile(app)
+    else: 
+        docker.add_default_profile();
+
+
+@click.command()
+@click.option('--app', help='Enable verbose logging')
+@click.option('--v', count=True, help='Enable verbose logging')
+def drun(app, v):
+    debug_logging(v)
+    if app != None :
+        docker.run_profile(app)
+    else: 
+        docker.run_all();
+
 
 
 dokecs.add_command(dock)
 dokecs.add_command(ecs)
 dokecs.add_command(aws)
 dokecs.add_command(configure)
+dokecs.add_command(drun)
 
 if __name__ == '__main__':  # pragma: no cover
     dokecs()
