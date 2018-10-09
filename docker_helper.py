@@ -53,42 +53,37 @@ def clean_all():
 
 
 def add_default_profile():
-    registry = click.prompt('[default] Your docker registry :', type=str)
-    dir_mapping = click.prompt('[default] Your default directory mapping :', type=str)
-    docker_env = click.prompt('[default] Environment Name eg. ENV_NAME  :', type=str)
+    registry = click.prompt(logger.style('\n[default] Your docker registry '), type=str)
+    dir_mapping = click.prompt(logger.style('\n[default] Your default directory mapping '), type=str)
+    env_vars = click.prompt(logger.style('\n[default] Environment vars(eg. ENV_NAME=dev)  '), type=str)
     config.set_env('default', 'docker_registry', registry)
     config.set_env('default', 'vol_mapping', dir_mapping)
-    config.set_env('default', 'docker_env', docker_env)
+    config.set_env('default', 'env_vars', env_vars)
 
+
+def input_config_vars(profile_name, key_name, is_default_exist):
+    if is_default_exist :
+        default_value = config.get_env('default', key_name)
+        user_input = click.prompt(logger.style('\nValue of ' + key_name), default=default_value, type=str)
+    else:
+        user_input = click.prompt(logger.style('\nYour ' + key_name), type=str)
+    
+    config.set_env(profile_name, key_name, user_input)
+    
 
 def add_profile(profile_name):
     config.add_profile(profile_name)
-    
     config.set_env(profile_name, 'app_name', profile_name)
-    registry = config.get_env('default', 'docker_registry')
-    dir_mapping = click.prompt('Your registry :', default=registry, type=str)
-    config.set_env(profile_name, 'docker_registry', registry)    
-    
-    vol_mapping = config.get_env('default', 'vol_mapping')
-    vol_mapping = click.prompt('Your volume mapping :', default=vol_mapping, type=str)
-    config.set_env(profile_name, 'vol_mapping', vol_mapping)
-    
-    port_mapping = click.prompt('Port Mapping :', type=str)
-    config.set_env(profile_name, 'port_mapping', port_mapping)
-    
-    repository_name = click.prompt('Repository Name :', default=profile_name, type=str)
-    config.set_env(profile_name, 'repo_name', repository_name)
-    
-    env_vars = config.get_env('default', 'env_vars')
-    env_vars = click.prompt('Repository Name :', env_vars, type=str)
-    config.set_env(profile_name, 'env_vars', env_vars)
+    input_config_vars(profile_name, 'docker_registry', True)
+    input_config_vars(profile_name, 'vol_mapping', True)
+    input_config_vars(profile_name, 'port_mapping', False)
+    input_config_vars(profile_name, 'env_vars', True)
 
     
-def run_profile(profile_name):
-    registry = config.get_env('default', 'docker_registry')
+def run_profile(profile_name, tag_name):
+    registry = config.get_env(profile_name, 'docker_registry')
     vol_mapping = config.get_env(profile_name, 'vol_mapping')
     port_mapping = config.get_env(profile_name, 'port_mapping')
-    repo_name = config.get_env(profile_name, 'repo_name')
     env_vars = config.get_env(profile_name, 'env_vars')
     
     command = "docker run -d "
@@ -96,19 +91,20 @@ def run_profile(profile_name):
     command += ' -p ' + port_mapping
     command += ' -v ' + vol_mapping
     command += ' -e ' + env_vars
-    
-    tag_list = utils.cmd_exec("aws ecr describe-images --repository-name " + repo_name + " --output text --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[*]' | tr '\t' '\n' | tail -10")
-    tag_list = list(reversed(tag_list.split('\n')))
-    logger.log_r('Select an image tag to deploy')
-    logger.log_y('\n'.join(tag_list)) 
-    tag = click.prompt('Select an tag to deploy: ?', type=click.Choice(tag_list))
-    logger.log_c('selected tag ' , tag)
+    tag = 'latest'
+    if tag_name == '':
+        logger.log_bl('\nGetting top 5 available tags of ' + profile_name + ' from Amazon ECR registry...')
+        tag_list = utils.cmd_exec("aws ecr describe-images --repository-name " + profile_name + " --output text --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[*]' | tr '\t' '\n' | tail -5")
+        tag_list = list(reversed(tag_list.split('\n')))
+        tag = click.prompt(logger.style('\nSelect an tag to deploy: ?'), type=click.Choice(tag_list))
+    logger.log_g('\nYou have selected tag: [ ' + tag + ' ]  for your application')
     command += ' ' + registry + '/' + profile_name + ':' + tag
-    print('final command : ' + command)
-    
+    logger.debug('final command : ' + command)
+    logger.log_y('\nKilling old container if exist')
     utils.cmd_exec('docker rm -f ' + profile_name)
-    
     utils.cmd_exec(command)
+    logger.log_g("\nSuccessfully started " + profile_name + " application . Please check logs using: ")
+    logger.log_cy("\n                 docker logs -f " + profile_name + "                          \n")
 
     
 def run_all():  
@@ -116,5 +112,5 @@ def run_all():
     for profile in profiles :
         if profile == 'default' :
             continue
-        print ("Profile name  " + profile)
-        run_profile(profile)
+        logger.log_g("\n******************** Running Profile " + profile + " ********************")
+        run_profile(profile, '')

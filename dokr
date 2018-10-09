@@ -75,7 +75,7 @@ def ecs(login, deploy, log , cluster, service, tag, v):
             tag = click.prompt('Give a Tag Name', type=str)
         ecs_helper.deploy(cluster, service, tag);
     if login == 'log' :
-	    ecs_helper.ecs_log()
+        ecs_helper.ecs_log()
 
 
 @click.command()
@@ -90,22 +90,24 @@ def configure(app, v):
 
 
 @click.command()
-@click.option('--app', help='Enable verbose logging')
+@click.option('--app', help='Give profile name to deploy [use dokr configure --app to create one] ')
+@click.option('--tag', help='Give tag information')
 @click.option('--v', count=True, help='Enable verbose logging')
-def drun(app, v):
+def run(app, tag, v):
     debug_logging(v)
-    if app != None :
-        docker.run_profile(app)
+    if app != None and tag != None:
+        docker.run_profile(app, tag)
+    elif app != None:
+        docker.run_profile(app, '')
     else: 
         docker.run_all();
-
 
 
 dokecs.add_command(dock)
 dokecs.add_command(ecs)
 dokecs.add_command(aws)
 dokecs.add_command(configure)
-dokecs.add_command(drun)
+dokecs.add_command(run)
 
 if __name__ == '__main__':  # pragma: no cover
     dokecs()

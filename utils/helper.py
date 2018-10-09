@@ -13,7 +13,7 @@ def cmd_exec(str):
     output = os.popen(str).read().strip()
     logger.debug("\n$>>" + output)
     logger.debug("\n------------------------ Executing Command: END ------------------------")
-    return os.popen(str).read().strip()
+    return output
 
 
 def join_me(stringList):
