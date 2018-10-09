@@ -85,7 +85,6 @@ def add_profile(profile_name):
 
     
 def run_profile(profile_name):
-    
     registry = config.get_env('default', 'docker_registry')
     vol_mapping = config.get_env(profile_name, 'vol_mapping')
     port_mapping = config.get_env(profile_name, 'port_mapping')
@@ -104,16 +103,18 @@ def run_profile(profile_name):
     logger.log_y('\n'.join(tag_list)) 
     tag = click.prompt('Select an tag to deploy: ?', type=click.Choice(tag_list))
     logger.log_c('selected tag ' , tag)
-    command += ' ' + registry + ':' + tag
-    
+    command += ' ' + registry + '/' + profile_name + ':' + tag
     print('final command : ' + command)
+    
+    utils.cmd_exec('docker rm -f ' + profile_name)
+    
+    utils.cmd_exec(command)
 
-
+    
 def run_all():  
     profiles = config.get_profiles() 
     for profile in profiles :
         if profile == 'default' :
             continue
-        
         print ("Profile name  " + profile)
         run_profile(profile)
