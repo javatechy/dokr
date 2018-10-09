@@ -94,6 +94,30 @@ dokr aws --ip jenkins
 ![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_aws_ip.png)
 
 
+#### Run Apps (subsitute to `docker run` command and DockerCompose)
+
++ Configure your default values(like docker registry, port mapping, volume mapping etc. that will be same for all apps):
+
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_configure.png)
+
+
++ Add an new app for deployment:
+
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_configure_app.png)
+
++ Run all configured apps:
+
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_run.png)
+
++ Run a particular  app from ECR tags:
+
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_run_app.png)
+
+
++ Run a particular  app by providing a tag:
+
+![alt dokr_aws_ip](https://raw.githubusercontent.com/javatechy/dokr/master/screenshots/dokr_run_app_tag.png)
+
 
 ### Development:
 
